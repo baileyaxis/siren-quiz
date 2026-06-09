@@ -192,6 +192,25 @@ body{
 .foot a:hover{color:var(--ink);}
 .foot .mk{display:block;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);margin-bottom:5px;}
 
+/* ---------- Deep dive (full reading) ---------- */
+.deepwrap{margin-top:30px;text-align:center;}
+.deepbtn{background:none;border:1.5px solid var(--ink);border-radius:100px;cursor:pointer;
+  font-family:'Hanken',sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;color:var(--ink);
+  padding:14px 28px;transition:all .16s ease;text-transform:uppercase;}
+.deepbtn:hover{background:var(--ink);color:var(--paper);}
+.deepdive{text-align:left;max-width:540px;margin:30px auto 0;animation:rise .5s cubic-bezier(.2,.7,.2,1);}
+.deephead{text-align:center;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700;
+  padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+.deepsec{padding-top:22px;}
+.deepsec h4{font-family:'Fraunces',serif;font-weight:600;font-size:19px;line-height:1.2;color:var(--ink);margin-bottom:9px;}
+.deepsec p{font-size:15.5px;line-height:1.62;color:var(--ink);}
+.deepsec .deeplist{list-style:none;margin-top:11px;display:flex;flex-direction:column;gap:8px;}
+.deepsec .deeplist li{display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:1.45;color:var(--ink);}
+.deepsec .deeplist li .dot{flex:0 0 auto;margin-top:8px;width:6px;height:6px;border-radius:50%;background:var(--siren-deep);}
+.deepclose{margin-top:28px;background:none;border:1.5px solid var(--line);border-radius:100px;cursor:pointer;
+  font-family:'Hanken',sans-serif;font-weight:600;font-size:13px;color:var(--soft);padding:11px 22px;transition:all .15s ease;}
+.deepclose:hover{border-color:var(--ink);color:var(--ink);}
+
 /* ---------- Email capture ---------- */
 #capture h1{font-family:'Fraunces',serif;font-weight:600;font-style:italic;font-size:clamp(30px,5.6vw,46px);line-height:1.06;letter-spacing:-.01em;margin:6px 0 0;}
 .leadform{display:flex;flex-direction:column;gap:12px;max-width:392px;margin:26px auto 0;}
@@ -291,6 +310,15 @@ body{
             <div class="blockh">Your Siren Call</div>
             <div class="calltext" id="r-call"></div>
             <div class="mantra"><small>Your Mantra</small><span id="r-mantra"></span></div>
+          </div>
+
+          <div class="deepwrap">
+            <button class="deepbtn" id="deepbtn">✦ &nbsp;Go deeper into your Siren&nbsp; ✦</button>
+            <div class="deepdive" id="deepdive" hidden>
+              <div class="deephead">The full reading</div>
+              <div id="deepbody"></div>
+              <button class="deepclose" id="deepclose">Close reading ✕</button>
+            </div>
           </div>
         </div>
 
@@ -413,7 +441,69 @@ const SIRENS = {
   }
 };
 
-/* ---------------- Questions ---------------- */
+/* ---------------- In-depth readings ---------------- */
+const DEEP = {
+  oracle:[
+    {h:"The heart of you", b:"You experience the world through a sense most people have been taught to ignore. Before the facts arrive, you already feel the shape of the truth. You read a room not by what's said but by what moves underneath it. You are a deep, still well — and people are quietly drawn to drink from your calm."},
+    {h:"Your gift, up close", b:"Your intuition is data, gathered faster than thought. When you honor it, you make uncannily good decisions and see people more clearly than they see themselves. The world calls it &ldquo;a gut feeling.&rdquo; For you it's a finely tuned instrument you were born holding."},
+    {h:"In love &amp; connection", b:"You love by attunement — noticing the small shifts, the unspoken needs, the mood before it's named. You long for a partner who can meet your depth and won't be unsettled by how much you perceive. Your edge: letting yourself be known as deeply as you know everyone else."},
+    {h:"At work &amp; in leadership", b:"You sense what's really happening beneath the meeting. You lead through insight and discernment rather than volume, and you're invaluable in strategy, culture, and reading what a team actually needs. Your growth is to voice what you sense instead of silently carrying it."},
+    {h:"Your shadow", b:"When you doubt your knowing, you go quiet, second-guess, and defer to louder voices. You can retreat so far inward that you vanish — or absorb everyone's feelings until you can't find your own. Unspoken intuition curdles into anxiety."},
+    {h:"How you're being called to grow", b:"Your work is to trust the first whisper and say it out loud, before you have proof. The world doesn't need you to be certain; it needs you to be honest about what you sense. Speaking your knowing is how your gift becomes a light for others."},
+    {h:"Practices for the Oracle", list:["Each morning, name one thing you &ldquo;just know&rdquo; — and write it down without justifying it.","When you sense something in a conversation, say it gently within a minute, before doubt edits it away.","Protect daily quiet — your intuition speaks in stillness, not in noise.","Notice whose emotions you're carrying, and hand back what was never yours."]},
+    {h:"On joy", b:"Joy returns to you in stillness, in water, in slowness — and in the deep relief of finally being understood. The moment you let someone truly see you, your light doubles."}
+  ],
+  flame:[
+    {h:"The heart of you", b:"You are momentum in human form. While others deliberate, something in you has already moved. You feel most alive at the edge — starting, igniting, leading the charge into what scares everyone else. You don't just want a bigger life; you go and take it."},
+    {h:"Your gift, up close", b:"Courage is contagious, and you are its source. You give people permission to want more and to act on it. Your decisiveness cuts through paralysis; your conviction turns &ldquo;maybe someday&rdquo; into &ldquo;starting now.&rdquo; You make brave look possible."},
+    {h:"In love &amp; connection", b:"You love with intensity and full presence — all in, no half-measures. You need a partner who can match your fire without trying to put it out, and who knows your drive is devotion, not distance. Your edge: slowing down enough to actually receive love, not only pursue and provide."},
+    {h:"At work &amp; in leadership", b:"You're the founder, the initiator, the one who ships. You thrive where there's a mountain to move and the freedom to move it your way. You inspire teams to act — and your growth is to pace the marathon, delegate, and trust others to carry the fire too."},
+    {h:"Your shadow", b:"Your fire can consume you. You confuse rest with laziness and worth with output, sprinting until you burn out, then judging yourself for needing to recover. Impatience can scorch the people you love. Unspent, your fire turns to restlessness and irritation."},
+    {h:"How you're being called to grow", b:"Your growth is to be tended, not just useful — to learn that a protected fire lasts longest. Rest isn't the opposite of power; it's what makes power sustainable. Lead from fullness, not from fumes."},
+    {h:"Practices for the Flame", list:["Schedule rest the way you schedule work — and treat it as non-negotiable.","Before you react, take three breaths; let your fire warm rather than burn.","Delegate one thing this week you'd normally power through alone.","Celebrate what you've already built before you chase the next thing."]},
+    {h:"On joy", b:"Joy meets you in motion and in completion — but also, surprisingly, in the stillness you finally allow. Your deepest joy is discovering you are loved for who you are, not only for what you achieve."}
+  ],
+  muse:[
+    {h:"The heart of you", b:"You are alive to beauty in a way most people aren't. You see possibility in the ordinary and can't help but make something of it — a moment, a room, an idea, a mood. You are magnetic, expressive, and a little impossible to look away from."},
+    {h:"Your gift, up close", b:"You turn the everyday into the extraordinary. You inspire, you energize, you give form to feeling. Your presence raises the temperature of a room, and people leave time with you feeling more creative, more alive, more themselves."},
+    {h:"In love &amp; connection", b:"You love through expression, delight, and play. You want to be adored and to adore — to be truly seen, not merely admired. Your edge: letting a partner see the unpolished, off-stage you, and trusting you're lovable even when you're not sparkling."},
+    {h:"At work &amp; in leadership", b:"You're the visionary, the brand-maker, the one who makes ideas magnetic. You shine in creative direction, storytelling, and anything that needs soul and style. Your growth is following through past the exciting beginning, and valuing depth as much as dazzle."},
+    {h:"Your shadow", b:"You can perform your light instead of living it — handing everyone the sparkle while quietly starving for realness. You may chase visibility and approval, then feel hollow when you finally get them. Without depth, applause never fills you."},
+    {h:"How you're being called to grow", b:"Your work is to let yourself be seen unedited — to trade performance for presence. Your realness is more magnetic than your polish ever was. When you create from truth instead of for approval, your work becomes unforgettable."},
+    {h:"Practices for the Muse", list:["Make something this week with no audience — just for you.","Share one honest, unpolished thing where you'd normally show only the highlight.","When you catch yourself performing, pause and ask: &ldquo;What's actually true right now?&rdquo;","Protect your creative input — beauty, art, nature — so your well stays full."]},
+    {h:"On joy", b:"Joy is your native language — found in color, creation, music, and connection. Your purest joy arrives when you're celebrated for who you really are, not the role you play."}
+  ],
+  tide:[
+    {h:"The heart of you", b:"You feel everything, and you love hard. You create belonging wherever you go — the one who remembers, who shows up, who makes people feel safe and home. Your empathy is vast; you carry others' joys and sorrows as if they were your own."},
+    {h:"Your gift, up close", b:"You make people feel seen, safe, and deeply loved. You are the emotional architecture of every group you're in — the glue, the heart, the trusted one. Your devotion is rare and your loyalty is total."},
+    {h:"In love &amp; connection", b:"You love completely and give generously — the partner and friend who anticipates needs and holds everyone together. Your edge: receiving as fully as you give, and believing your own needs are as worthy as everyone else's."},
+    {h:"At work &amp; in leadership", b:"You lead through care, connection, and culture, building teams where people feel they belong and want to stay. You're the heart of any organization — and your growth is guarding against over-giving, people-pleasing, and quietly resenting what you never asked for."},
+    {h:"Your shadow", b:"You give until there's nothing left, then call it love. You make your own needs smaller and smaller until you disappear from your own life. You can lose yourself in others, mistake self-sacrifice for virtue, and burn out from a love that never flows back."},
+    {h:"How you're being called to grow", b:"Your work is to receive — to let yourself be held as generously as you hold everyone else. Your needs are not too much; they were always meant to be met. Boundaries aren't the opposite of love; they're what keep love alive."},
+    {h:"Practices for the Tide", list:["Ask for help with one thing this week, before you're depleted.","Practice saying &ldquo;no&rdquo; without an apology or an explanation.","Each day, name one of your own needs — and meet it.","Notice when you're over-functioning for others, and let them carry their own."]},
+    {h:"On joy", b:"Joy returns when you let love flow in both directions — when you're cared for, not only caregiving. Your deepest joy is belonging to yourself first, and then to your people."}
+  ],
+  sovereign:[
+    {h:"The heart of you", b:"You carry a quiet, unmistakable authority. You know your worth, you hold your ground, and you don't ask permission to take up space. People follow your certainty before you say a word. You are self-possessed in a world that keeps trying to talk women out of it."},
+    {h:"Your gift, up close", b:"You lead with presence, not noise. Your boundaries are clean, your standards are high, and your steadiness is a refuge for everyone around you. You make the hard decisions others avoid, and you hold the line when it matters most."},
+    {h:"In love &amp; connection", b:"You love with loyalty and strength, and you respect a partner with a spine of their own — you want an equal, not a project. Your edge: letting someone past the armor, allowing yourself to be tender, supported, even taken care of."},
+    {h:"At work &amp; in leadership", b:"You're the natural leader, the one others look to in a crisis. You command respect and deliver results. Your growth is softening your power so it becomes magnetic rather than only formidable — and remembering that vulnerability is a form of strength, not a breach of it."},
+    {h:"Your shadow", b:"Your strength can harden into armor. You equate softness with weakness and independence with safety, walling off the tenderness, play, and joy that make you human. You can become rigid, controlling, or isolated — strong, but alone."},
+    {h:"How you're being called to grow", b:"Your work is to let your guard down on purpose. Power that can be soft is power that can be loved. The bravest thing you can do isn't to hold the line — it's to let someone in."},
+    {h:"Practices for the Sovereign", list:["Let someone help you this week without insisting you're fine.","Share one fear or soft feeling with a person you trust.","Schedule unproductive play — joy with no purpose at all.","Notice where control is really fear, and loosen your grip one degree."]},
+    {h:"On joy", b:"Joy lives on the other side of your armor — in softness, in play, in being cared for. Your deepest joy is discovering you are safe enough to be tender."}
+  ],
+  voyager:[
+    {h:"The heart of you", b:"You are always reaching toward the horizon. You can feel the next version of yourself before she exists, and that pull is your compass. Growth isn't optional for you — it's oxygen. You're here to expand, and to bring others with you when you do."},
+    {h:"Your gift, up close", b:"You see what's possible before anyone else does. You're a visionary and a seeker — you turn &ldquo;what if&rdquo; into &ldquo;why not,&rdquo; and you give people the courage to dream bigger. Where others see limits, you see the next frontier."},
+    {h:"In love &amp; connection", b:"You love through growth and adventure — you want a partner to evolve alongside, not outgrow. You need freedom and a fellow explorer. Your edge: staying present in the relationship you're in, rather than always reaching for what's next."},
+    {h:"At work &amp; in leadership", b:"You're the founder, the futurist, the one with the big vision. You thrive in expansion, new ventures, and possibility. Your growth is landing — finishing, savoring, and rooting your vision into reality instead of leaping to the next idea before this one arrives."},
+    {h:"Your shadow", b:"You can chase the next thing so relentlessly that you never arrive at this one. &ldquo;Someday&rdquo; becomes a place you live, and you miss the beautiful life that's already here. Restlessness masquerades as ambition; you're always almost-there and never quite home."},
+    {h:"How you're being called to grow", b:"Your work is to let it be enough — here, now. The dream you're reaching for is closer than you think, and you're allowed to arrive. Presence is the final frontier. Someday ends now."},
+    {h:"Practices for the Voyager", list:["Each day, name one thing that is already enough.","Finish something before you start the next thing.","Savor a win for a full week before you chase the next.","Practice being fully here — in your body, in this moment, in this life."]},
+    {h:"On joy", b:"Joy is found not only at the horizon, but right where you're standing. Your deepest joy is realizing you don't have to get anywhere else to be whole."}
+  ]
+};
 const QUESTIONS = [
   { q:"Be honest — what's the truest thing about how you move through the world?",
     a:[ ["I feel everything. I sense what's underneath what people say.","oracle"],
@@ -538,8 +628,8 @@ function computeResult(){
   $('#r-name').textContent = primary.name;
   $('#r-essence').textContent = '“'+primary.essence+'”';
   $('#r-secondary').innerHTML = showSecond
-      ? 'with a strong current of <b>'+second.name+'</b>'
-      : 'a clear, singular frequency';
+      ? 'This is your <b>primary</b> Siren — with <b>'+second.name+'</b> as a <b>secondary</b> current running beneath it (an influence, not a second main).'
+      : 'a clear, singular frequency — this is purely your Siren.';
   $('#r-desc').textContent = primary.desc;
   const g=$('#r-gifts'); g.innerHTML='';
   primary.gifts.forEach(t=>{ const li=document.createElement('li'); li.innerHTML='<span class="dot"></span><span>'+t+'</span>'; g.appendChild(li); });
@@ -552,12 +642,49 @@ function computeResult(){
 
   // share text
   window.__shareText = "I'm "+primary.name+" — “"+primary.essence+"”\n\nWhat kind of Siren are you? Take Chérie Healey's quiz: cheriehealey.com";
+
+  // deep dive (full in-depth reading of THEIR siren only)
+  window.__resultKey = ranked[0];
+  renderDeep(ranked[0]);
+  const dd=$('#deepdive'); dd.setAttribute('hidden','');
+  $('#deepbtn').textContent='✦  Go deeper into '+primary.name+'  ✦';
+}
+
+function renderDeep(key){
+  const secs = DEEP[key] || [];
+  const body = $('#deepbody'); body.innerHTML='';
+  secs.forEach(sec=>{
+    let html='<div class="deepsec"><h4>'+sec.h+'</h4>';
+    if(sec.b) html+='<p>'+sec.b+'</p>';
+    if(sec.list){ html+='<ul class="deeplist">'+sec.list.map(x=>'<li><span class="dot"></span><span>'+x+'</span></li>').join('')+'</ul>'; }
+    html+='</div>';
+    body.insertAdjacentHTML('beforeend',html);
+  });
 }
 
 /* events */
 $('#start').addEventListener('click',()=>{ idx=0; renderQuestion(); show('quiz'); });
 $('#back').addEventListener('click',()=>{ if(idx>0){ idx--; renderQuestion(); } });
-$('#retake').addEventListener('click',()=>{ idx=0; answers.fill(null); var e=$('#lf-email'); if(e)e.value=''; var n=$('#lf-name'); if(n)n.value=''; var er=$('#lf-err'); if(er)er.textContent=''; show('intro'); });
+$('#retake').addEventListener('click',()=>{ idx=0; answers.fill(null); var e=$('#lf-email'); if(e)e.value=''; var n=$('#lf-name'); if(n)n.value=''; var er=$('#lf-err'); if(er)er.textContent=''; var dd=$('#deepdive'); if(dd)dd.setAttribute('hidden',''); show('intro'); });
+
+/* deep-dive toggle */
+$('#deepbtn').addEventListener('click',()=>{
+  const dd=$('#deepdive'); const key=window.__resultKey;
+  if(dd.hasAttribute('hidden')){
+    dd.removeAttribute('hidden');
+    $('#deepbtn').textContent='✦  Close the reading  ✦';
+    dd.scrollIntoView({behavior:'smooth',block:'start'});
+  } else {
+    dd.setAttribute('hidden','');
+    $('#deepbtn').textContent='✦  Go deeper into '+(SIRENS[key]?SIRENS[key].name:'your Siren')+'  ✦';
+  }
+});
+$('#deepclose').addEventListener('click',()=>{
+  const dd=$('#deepdive'); const key=window.__resultKey;
+  dd.setAttribute('hidden','');
+  $('#deepbtn').textContent='✦  Go deeper into '+(SIRENS[key]?SIRENS[key].name:'your Siren')+'  ✦';
+  $('#deepbtn').scrollIntoView({behavior:'smooth',block:'center'});
+});
 
 /* lead capture */
 async function sendLead(name,email){
